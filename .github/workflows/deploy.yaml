@@ -40,9 +40,13 @@ jobs:
           
           cd platform
           
-          # Update ONLY the image.tag value (not all values!)
-          sed -i "/name: image.tag/,/value:/ s|value: .*|value: ${{ github.sha }}|" \
-            Falcon-Platform/gitops/apps/sample-flask.yaml
+          # Update ONLY the image.tag value using awk for precision
+          awk -v sha="${{ github.sha }}" '
+            /name: image.tag/ { found=1; print; next }
+            found && /value:/ { print "          value: " sha; found=0; next }
+            { print }
+          ' Falcon-Platform/gitops/apps/sample-flask.yaml > temp.yaml && \
+          mv temp.yaml Falcon-Platform/gitops/apps/sample-flask.yaml
           
           # Commit and push
           git config user.name "GitHub Actions Bot"
