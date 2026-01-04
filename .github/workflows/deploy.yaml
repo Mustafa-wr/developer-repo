@@ -6,6 +6,7 @@ on:
       - 'src/**'
       - 'Dockerfile'
       - 'requirements.txt'
+      - '.github/workflows/**'
     branches: [main]
 
 permissions:
