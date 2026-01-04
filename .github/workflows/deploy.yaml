@@ -35,13 +35,13 @@ jobs:
         env:
           PLATFORM_REPO_TOKEN: ${{ secrets.PLATFORM_REPO_TOKEN }}
         run: |
-          # Clone platform repo with token
-          git clone https://x-access-token:${PLATFORM_REPO_TOKEN}@github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git platform
+          # Clone platform repo
+          git clone https://oauth2:${PLATFORM_REPO_TOKEN}@github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git platform
           
           cd platform
           
-          # Update the image tag
-          sed -i "s|value: .*|value: ${{ github.sha }}|" \
+          # Update ONLY the image.tag value (not all values!)
+          sed -i "/name: image.tag/,/value:/ s|value: .*|value: ${{ github.sha }}|" \
             Falcon-Platform/gitops/apps/sample-flask.yaml
           
           # Commit and push
