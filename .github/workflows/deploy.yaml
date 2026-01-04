@@ -40,8 +40,8 @@ jobs:
           
           cd platform
           
-          # Update the image.tag value (find image.tag line and update the next value line)
-          sed -i '/name: image.tag/{n;s/value: .*/value: ${{ github.sha }}/}' \
+          # Update the image.tag value using yq
+          yq -i '(.spec.source.helm.parameters[] | select(.name == "image.tag")).value = "${{ github.sha }}"' \
             Falcon-Platform/gitops/apps/sample-flask.yaml
           
           # Commit and push
