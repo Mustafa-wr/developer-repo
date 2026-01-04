@@ -34,13 +34,10 @@ jobs:
         env:
           PLATFORM_REPO_TOKEN: ${{ secrets.PLATFORM_REPO_TOKEN }}
         run: |
-          # Clone platform repo
-          git clone https://github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git platform
+          # Clone platform repo with token
+          git clone https://x-access-token:${PLATFORM_REPO_TOKEN}@github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git platform
           
           cd platform
-          
-          # Configure git to use the token
-          git remote set-url origin https://oauth2:${PLATFORM_REPO_TOKEN}@github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git
           
           # Update the image tag
           sed -i "s|value: .*|value: ${{ github.sha }}|" \
