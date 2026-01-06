@@ -31,24 +31,26 @@ jobs:
           docker build -t mostafawr/sample-flask-app:${{ github.sha }} .
           docker push mostafawr/sample-flask-app:${{ github.sha }}
       
+      - name: Install Kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo mv kustomize /usr/local/bin/
+      
       - name: Update platform repo GitOps manifest
         env:
           PLATFORM_REPO_TOKEN: ${{ secrets.PLATFORM_REPO_TOKEN }}
         run: |
-          # Clone platform repo with token
+          # Clone platform repo
           git clone https://x-access-token:${PLATFORM_REPO_TOKEN}@github.com/Mustafa-wr/Kubernetes-Platform-Engineering.git platform
           
-          cd platform
+          cd platform/Falcon-Platform/gitops/environments/overlays/dev-flask
           
-          cd Falcon-Platform/gitops/environments/overlays/dev
           # Update the image tag using kustomize
           kustomize edit set image mostafawr/sample-flask-app=mostafawr/sample-flask-app:${{ github.sha }}
           
-          # Commit and push (add the kustomization.yaml file that was modified)
+          # Commit and push
           git config user.name "GitHub Actions Bot"
           git config user.email "bot@github.com"
-          git add .
-          git commit -m "chore: update sample-flask to ${{ github.sha }}"
-          git push
-          git commit -m "chore: update sample-flask to ${{ github.sha }}"
+          git add kustomization.yaml
+          git commit -m "chore(dev): update sample-flask to ${{ github.sha }}"
           git push
