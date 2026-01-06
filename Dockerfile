@@ -9,4 +9,9 @@ COPY src/app.py .
 
 EXPOSE 8080
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "app:app"]
+# Auto-instrument with OpenTelemetry
+CMD ["opentelemetry-instrument", \
+     "--traces_exporter", "otlp", \
+     "--metrics_exporter", "otlp", \
+     "--service_name", "sample-flask-app", \
+     "gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "app:app"]
