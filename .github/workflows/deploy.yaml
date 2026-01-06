@@ -41,12 +41,14 @@ jobs:
           cd platform
           
           cd Falcon-Platform/gitops/environments/overlays/dev
-          # Update the image.tag value using yq
+          # Update the image tag using kustomize
           kustomize edit set image mostafawr/sample-flask-app=mostafawr/sample-flask-app:${{ github.sha }}
           
-          # Commit and push
+          # Commit and push (add the kustomization.yaml file that was modified)
           git config user.name "GitHub Actions Bot"
           git config user.email "bot@github.com"
-          git add Falcon-Platform/gitops/apps/sample-flask.yaml
+          git add .
+          git commit -m "chore: update sample-flask to ${{ github.sha }}"
+          git push
           git commit -m "chore: update sample-flask to ${{ github.sha }}"
           git push

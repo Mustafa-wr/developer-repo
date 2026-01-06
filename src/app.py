@@ -8,7 +8,6 @@ def hello():
     version = os.getenv('APP_VERSION', 'v1.0')
     return f'Hello from Flask! Version: {version}\n'
 
-
 @app.route('/health')
 def health():
     return 'OK', 200
