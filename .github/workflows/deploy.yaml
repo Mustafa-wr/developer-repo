@@ -40,9 +40,9 @@ jobs:
           
           cd platform
           
+          cd Falcon-Platform/gitops/environments/overlays/dev
           # Update the image.tag value using yq
-          yq -i '(.spec.source.helm.parameters[] | select(.name == "image.tag")).value = "${{ github.sha }}"' \
-            Falcon-Platform/gitops/apps/sample-flask.yaml
+          kustomize edit set image mostafawr/sample-flask-app=mostafawr/sample-flask-app:${{ github.sha }}
           
           # Commit and push
           git config user.name "GitHub Actions Bot"
