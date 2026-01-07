@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     version = os.getenv('APP_VERSION', 'v1.0')
-    return f'trigger for otl'
+    return f'trigger for otl0.1'
 
 @app.route('/health')
 def health():
